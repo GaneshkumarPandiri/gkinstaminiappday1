@@ -1,0 +1,117 @@
+.profile-pic {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+.post-item-container {
+  background-color: #ffffff;
+}
+.profile-background {
+  border: 2px solid violet;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1px;
+  margin: 15px;
+}
+.post-by {
+  display: flex;
+  align-items: center;
+}
+.username {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  display: flex;
+  align-items: center;
+  color: #262626;
+  text-decoration: none;
+}
+.post-image {
+  width: 100%;
+}
+.fc-like {
+  width: 33.24px;
+  height: 30px;
+  margin: 5px;
+}
+.fa-comment {
+  width: 33.24px;
+  height: 25px;
+  margin: 5px;
+  padding-top: 2px;
+}
+.bi-share {
+  width: 31.24px;
+  height: 23px;
+  margin: 5px;
+}
+.bs-heart {
+  width: 33.24px;
+  height: 25px;
+  margin: 5px;
+}
+.react-icons {
+  border: none;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px;
+}
+
+.post-reactions-container {
+  display: flex;
+  align-items: center;
+}
+.likes-count {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  color: #262626;
+}
+.caption {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  display: flex;
+  align-items: center;
+  color: #262626;
+  margin-left: 10px;
+}
+.comment-description {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  display: flex;
+  align-items: center;
+  color: #262626;
+  margin: 0px;
+}
+.commented-by {
+  font-weight: 600;
+}
+.time {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  display: flex;
+  align-items: center;
+  color: #989898;
+  margin-left: 10px;
+  padding-bottom: 24px;
+}

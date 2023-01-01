@@ -1,0 +1,41 @@
+.home-container {
+  padding-left: 100px;
+  padding-right: 100px;
+  background-color: #fafafa;
+  padding-top: 20px;
+}
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 30vh;
+}
+.loader-container-posts {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+}
+.retry-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 32px;
+  gap: 8px;
+  width: 141px;
+  height: 48px;
+  background: #4094ef;
+  border-radius: 12px;
+}
+.response-failed-container-stories {
+  min-height: 25vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.response-failed-container-posts {
+  min-height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
