@@ -2,6 +2,9 @@ import {Component} from 'react'
 import Cookies from 'js-cookie'
 import Loader from 'react-loader-spinner'
 import {BsGrid3X3} from 'react-icons/bs'
+import {BiCamera} from 'react-icons/bi'
+
+import Header from '../Header'
 
 import './index.css'
 
@@ -25,8 +28,8 @@ class UserProfile extends Component {
   getUserProfile = async () => {
     const {match} = this.props
     const {params} = match
-    const {userId} = params
-    const userProfileAPIUrl = `https://apis.ccbp.in/insta-share/users/${userId}`
+    const {id} = params
+    const userProfileAPIUrl = `https://apis.ccbp.in/insta-share/users/${id}`
     const jwtToken = Cookies.get('jwt_token')
     const options = {
       method: 'GET',
@@ -99,14 +102,9 @@ class UserProfile extends Component {
         </div>
         <ul className="user-profile-stories-container">
           {stories.map(item => (
-            <div className="user-profile-story-background">
-              <img
-                src={item.image}
-                alt="user story"
-                key={item.id}
-                className="user-story"
-              />
-            </div>
+            <li className="user-profile-story-background" key={item.id}>
+              <img src={item.image} alt="user story" className="user-story" />
+            </li>
           ))}
         </ul>
         <hr />
@@ -114,20 +112,28 @@ class UserProfile extends Component {
           <button type="button" className="grid-button">
             <BsGrid3X3 className="bs-grid" />
           </button>
-          <p className="posts">Posts</p>
+          <h1 className="posts">Posts</h1>
         </div>
-        <ul className="user-profile-posts">
-          {posts.map(post => (
-            <li>
-              <img
-                src={post.image}
-                alt="user post"
-                key={post.id}
-                className="user-profile-post"
-              />
-            </li>
-          ))}
-        </ul>
+        {posts.length > 0 ? (
+          <ul className="user-profile-posts">
+            {posts.map(post => (
+              <li key={post.id}>
+                <img
+                  src={post.image}
+                  alt="user post"
+                  className="user-profile-post"
+                />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="no-posts-view">
+            <div className="no-posts-camera">
+              <BiCamera className="bi-camera" />
+            </div>
+            <h1 className="no-posts">No Posts Yet</h1>
+          </div>
+        )}
       </div>
     )
   }
@@ -140,13 +146,19 @@ class UserProfile extends Component {
 
   onFailureUserProfile = () => (
     <div className="response-failed-container-user-profile">
-      <h1>Oops! Something Went Wrong</h1>
+      <img
+        src="https://res.cloudinary.com/nxt-wave-ganesh/image/upload/v1672649558/Group_7522_gzeezv.png"
+        alt="failure view"
+      />
+      <p className="failure-my-profile-view">
+        Something went wrong. Please try again
+      </p>
       <button
         type="button"
         className="retry-button"
         onClick={this.onRetryPosts}
       >
-        Retry
+        Try again
       </button>
     </div>
   )
@@ -175,10 +187,13 @@ class UserProfile extends Component {
   render() {
     const {isLoadingUserProfile} = this.state
     return (
-      <div className="user-profile-container">
-        {isLoadingUserProfile
-          ? this.renderLoaderUserProfile()
-          : this.renderUserProfile()}
+      <div>
+        <Header />
+        <div className="user-profile-container">
+          {isLoadingUserProfile
+            ? this.renderLoaderUserProfile()
+            : this.renderUserProfile()}
+        </div>
       </div>
     )
   }

@@ -33,11 +33,7 @@
 .post-image {
   width: 100%;
 }
-.fc-like {
-  width: 33.24px;
-  height: 30px;
-  margin: 5px;
-}
+
 .fa-comment {
   width: 33.24px;
   height: 25px;
@@ -50,6 +46,11 @@
   margin: 5px;
 }
 .bs-heart {
+  width: 33.24px;
+  height: 25px;
+  margin: 5px;
+}
+.fc-like {
   width: 33.24px;
   height: 25px;
   margin: 5px;

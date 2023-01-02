@@ -26,6 +26,7 @@
   height: 48px;
   background: #4094ef;
   border-radius: 12px;
+  border: none;
 }
 .response-failed-container-stories {
   min-height: 25vh;
@@ -38,4 +39,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.fail-posts {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #262626;
 }

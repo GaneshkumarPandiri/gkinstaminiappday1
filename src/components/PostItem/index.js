@@ -1,6 +1,6 @@
 import {Link} from 'react-router-dom'
 
-// import {FcLike} from 'react-icons/fc'
+import {FcLike} from 'react-icons/fc'
 import {BsHeart} from 'react-icons/bs'
 import {FaRegComment} from 'react-icons/fa'
 import {BiShareAlt} from 'react-icons/bi'
@@ -8,14 +8,12 @@ import {BiShareAlt} from 'react-icons/bi'
 import './index.css'
 
 /*
- <button type="button" className="react-icons">
-          <FcLike className="fc-like" />
-        </button>
+ 
 
         */
 
 const PostItem = props => {
-  const {postItem} = props
+  const {postItem, onClickLikePost, likedPostsList, likeCounting} = props
   const {
     userId,
     userName,
@@ -26,6 +24,18 @@ const PostItem = props => {
     comments,
     postDetails,
   } = postItem
+
+  const onLikePost = () => {
+    onClickLikePost(postId)
+  }
+  const isLikedPost = likedPostsList.includes(postId)
+  let count
+  if (isLikedPost) {
+    count = likesCount + likeCounting
+  } else {
+    count = likesCount
+  }
+
   return (
     <li className="post-item-container">
       <div className="post-by">
@@ -36,15 +46,32 @@ const PostItem = props => {
             className="profile-pic"
           />
         </div>
-        <Link to={`/user-profile/${userId}`} className="header-links-style">
+        <Link to={`/users/${userId}`} className="header-links-style">
           <p className="username">{userName}</p>
         </Link>
       </div>
       <img src={postDetails.image_url} alt="post" className="post-image" />
       <div className="post-reactions-container">
-        <button type="button" className="react-icons">
-          <BsHeart className="bs-heart" />
-        </button>
+        {isLikedPost ? (
+          <button
+            // testid="unLikeIcon"
+            type="button"
+            className="react-icons"
+            onClick={onLikePost}
+          >
+            <FcLike className="fc-like" />
+          </button>
+        ) : (
+          <button
+            // testid="likeIcon"
+            type="button"
+            className="react-icons"
+            onClick={onLikePost}
+          >
+            <BsHeart className="bs-heart" />
+          </button>
+        )}
+
         <button type="button" className="react-icons">
           <FaRegComment className="fa-comment" />
         </button>
@@ -52,14 +79,16 @@ const PostItem = props => {
           <BiShareAlt className="bi-share" />
         </button>
       </div>
-      <p className="likes-count">{likesCount} likes</p>
+      <p className="likes-count">{count} likes</p>
       <p className="caption">{postDetails.caption}</p>
       <ul>
         {comments.map(commentItem => (
           <li key={commentItem.user_id} className="comment-description">
-            <span className="commented-by">{commentItem.user_name}</span>{' '}
-            &nbsp;&nbsp;
-            {commentItem.comment}
+            <p>
+              <span className="commented-by">{commentItem.user_name}</span>{' '}
+              &nbsp;&nbsp;
+              {commentItem.comment}
+            </p>
           </li>
         ))}
       </ul>

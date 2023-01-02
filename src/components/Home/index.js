@@ -2,6 +2,8 @@ import {Component} from 'react'
 import Cookies from 'js-cookie'
 import Loader from 'react-loader-spinner'
 
+import Header from '../Header'
+
 import PostItem from '../PostItem'
 import UserStoriesList from '../UserStoriesList'
 
@@ -31,7 +33,8 @@ class Home extends Component {
     postsList: [],
     isLoadingPosts: true,
     postsListResponseStatus: postsListResponse.initial,
-    searchInput: '',
+    likedPostsList: [],
+    likeCounting: 0,
   }
 
   // mounting user stories and posts list
@@ -64,11 +67,13 @@ class Home extends Component {
         userStoriesList: convertedStoriesData,
         isLoadingStories: false,
         userStoriesResponseStatus: userStoriesResponse.success,
+        likeCounting: 1,
       })
     } else {
       this.setState({
         isLoadingStories: false,
         userStoriesResponseStatus: userStoriesResponse.failure,
+        likeCounting: -1,
       })
     }
   }
@@ -87,13 +92,17 @@ class Home extends Component {
 
   onFailureStoriesResponse = () => (
     <div className="response-failed-container-stories">
-      <h1>Oops! Something Went Wrong</h1>
+      <img
+        src="https://res.cloudinary.com/nxt-wave-ganesh/image/upload/v1672649241/alert-triangle_qj59vs.png"
+        alt="failure view"
+      />
+      <h1 className="fail-posts">Something went wrong. Please try again</h1>
       <button
         type="button"
         className="retry-button"
         onClick={this.onRetryStories}
       >
-        Retry
+        Try again
       </button>
     </div>
   )
@@ -117,11 +126,7 @@ class Home extends Component {
   // getting posts list start
 
   getPostsList = async () => {
-    //  const postsListAPIUrl = 'https://apis.ccbp.in/insta-share/posts'
-    const {searchInput} = this.state
-
-    const postsListAPIUrl = ` https://apis.ccbp.in/insta-share/posts?search=${searchInput}`
-
+    const postsListAPIUrl = 'https://apis.ccbp.in/insta-share/posts'
     const jwtToken = Cookies.get('jwt_token')
     const options = {
       method: 'GET',
@@ -155,12 +160,55 @@ class Home extends Component {
     }
   }
 
+  // ON Like Post
+
+  onClickLikePost = async postId => {
+    const {likedPostsList} = this.state
+    let like
+    if (likedPostsList.includes(postId)) {
+      like = false
+    } else {
+      like = true
+    }
+    const jwtToken = Cookies.get('jwt_token')
+    const postLikeAPI = `https://apis.ccbp.in/insta-share/posts/${postId}/like`
+    const likeStatus = {
+      like_status: like,
+    }
+    const options = {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+      },
+      body: JSON.stringify(likeStatus),
+    }
+    const response = await fetch(postLikeAPI, options)
+    console.log(response)
+
+    if (!likedPostsList.includes(postId)) {
+      this.setState(prevState => ({
+        likedPostsList: [...prevState.likedPostsList, postId],
+      }))
+    } else {
+      const updatedLikedList = likedPostsList.filter(item => item !== postId)
+      this.setState({likedPostsList: updatedLikedList})
+    }
+  }
+
+  // On success post render
+
   onSuccessPostsResponse = () => {
-    const {postsList} = this.state
+    const {postsList, likedPostsList, likeCounting} = this.state
     return (
       <ul>
         {postsList.map(postItem => (
-          <PostItem postItem={postItem} key={postItem.postId} />
+          <PostItem
+            postItem={postItem}
+            onClickLikePost={this.onClickLikePost}
+            likedPostsList={likedPostsList}
+            likeCounting={likeCounting}
+            key={postItem.postId}
+          />
         ))}
       </ul>
     )
@@ -172,13 +220,18 @@ class Home extends Component {
 
   onFailurePostsResponse = () => (
     <div className="response-failed-container-posts">
-      <h1>Oops! Something Went Wrong</h1>
+      <img
+        src="https://res.cloudinary.com/nxt-wave-ganesh/image/upload/v1672649241/alert-triangle_qj59vs.png"
+        alt="failure view"
+      />
+
+      <h1 className="fail-posts">Something went wrong. Please try again</h1>
       <button
         type="button"
         className="retry-button"
         onClick={this.onRetryPosts}
       >
-        Retry
+        Try again
       </button>
     </div>
   )
@@ -212,11 +265,16 @@ class Home extends Component {
   render() {
     const {isLoadingStories, isLoadingPosts} = this.state
     return (
-      <div className="home-container">
-        {isLoadingStories
-          ? this.renderLoaderUserSlick()
-          : this.renderStoriesSlick()}
-        {isLoadingPosts ? this.renderLoaderPostsList() : this.renderPostsList()}
+      <div>
+        <Header />
+        <div className="home-container">
+          {isLoadingStories
+            ? this.renderLoaderUserSlick()
+            : this.renderStoriesSlick()}
+          {isLoadingPosts
+            ? this.renderLoaderPostsList()
+            : this.renderPostsList()}
+        </div>
       </div>
     )
   }

@@ -3,7 +3,7 @@
   height: 100vh;
   background: #ffffff;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 }
 .log-in-form-container {
@@ -72,4 +72,13 @@
   font-size: 14px;
   line-height: 16px;
   color: #ef4444;
+}
+.login-image {
+  width: 582px;
+  height: 373px;
+}
+.website-logo {
+  width: 82px;
+  height: 42px;
+  align-self: center;
 }

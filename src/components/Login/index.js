@@ -29,10 +29,11 @@ class Login extends Component {
     Cookies.set('jwt_token', jwtToken, {expires: 30})
     const {history} = this.props
     history.replace('/')
+    this.setState({username: '', password: ''})
   }
 
   onLoginFailure = errorMessage => {
-    this.setState({isLoginFail: true, errorMessage})
+    this.setState({isLoginFail: true, errorMessage, username: '', password: ''})
   }
 
   onUsernameInput = event => {
@@ -51,14 +52,24 @@ class Login extends Component {
     }
     return (
       <div className="login-page-main-container">
+        <img
+          src="https://res.cloudinary.com/nxt-wave-ganesh/image/upload/v1672648076/log_in_x14zmj.png"
+          alt="website login"
+          className="login-image"
+        />
         <form className="log-in-form-container" onSubmit={this.onLoginAccount}>
-          <img src="" alt="" />
+          <img
+            src="https://res.cloudinary.com/nxt-wave-ganesh/image/upload/v1672648742/Standard_Collection_8_wbkmcc.png"
+            alt="website logo"
+            className="website-logo"
+          />
           <h1 className="logo-heading-on-form">Insta Share</h1>
           <label htmlFor="username" className="label">
             USERNAME
           </label>
           <input
             type="text"
+            id="username"
             className="login-input-field"
             placeholder="Username"
             value={username}
@@ -69,13 +80,14 @@ class Login extends Component {
           </label>
           <input
             type="password"
+            id="password"
             className="login-input-field"
             placeholder="Password"
             value={password}
             onChange={this.onPasswordInput}
           />
           <button type="submit" className="submit-button">
-            Submit
+            Login
           </button>
           {isLoginFail && <p className="error-msg">*{errorMessage}</p>}
         </form>
