@@ -35,6 +35,8 @@ class Home extends Component {
     postsListResponseStatus: postsListResponse.initial,
     likedPostsList: [],
     likeCounting: 0,
+    searchInput: '',
+    isSearchResults: false,
   }
 
   // mounting user stories and posts list
@@ -110,15 +112,19 @@ class Home extends Component {
   // stories slick status
 
   renderStoriesSlick = () => {
-    const {userStoriesResponseStatus} = this.state
-    switch (userStoriesResponseStatus) {
-      case userStoriesResponse.success:
-        return this.onSuccessStoriesResponse()
-      case userStoriesResponse.failure:
-        return this.onFailureStoriesResponse()
-      default:
-        return null
+    const {userStoriesResponseStatus, isSearchResults} = this.state
+
+    if (!isSearchResults) {
+      switch (userStoriesResponseStatus) {
+        case userStoriesResponse.success:
+          return this.onSuccessStoriesResponse()
+        case userStoriesResponse.failure:
+          return this.onFailureStoriesResponse()
+        default:
+          return null
+      }
     }
+    return null
   }
 
   // getting user stories end
@@ -126,7 +132,8 @@ class Home extends Component {
   // getting posts list start
 
   getPostsList = async () => {
-    const postsListAPIUrl = 'https://apis.ccbp.in/insta-share/posts'
+    const {searchInput} = this.state
+    const postsListAPIUrl = `https://apis.ccbp.in/insta-share/posts?search=${searchInput}`
     const jwtToken = Cookies.get('jwt_token')
     const options = {
       method: 'GET',
@@ -198,19 +205,42 @@ class Home extends Component {
   // On success post render
 
   onSuccessPostsResponse = () => {
-    const {postsList, likedPostsList, likeCounting} = this.state
+    const {
+      postsList,
+      likedPostsList,
+      likeCounting,
+      isSearchResults,
+    } = this.state
+    if (postsList.length > 0) {
+      return (
+        <>
+          {isSearchResults && (
+            <h1 className="search-results-heading">Search Results</h1>
+          )}
+          <ul>
+            {postsList.map(postItem => (
+              <PostItem
+                postItem={postItem}
+                onClickLikePost={this.onClickLikePost}
+                likedPostsList={likedPostsList}
+                likeCounting={likeCounting}
+                key={postItem.postId}
+              />
+            ))}
+          </ul>
+        </>
+      )
+    }
     return (
-      <ul>
-        {postsList.map(postItem => (
-          <PostItem
-            postItem={postItem}
-            onClickLikePost={this.onClickLikePost}
-            likedPostsList={likedPostsList}
-            likeCounting={likeCounting}
-            key={postItem.postId}
-          />
-        ))}
-      </ul>
+      <div className="no-search-results-container">
+        <img
+          src="https://res.cloudinary.com/nxt-wave-ganesh/image/upload/v1672813165/Group_lce97o.png"
+          alt="search not found"
+          className="search-not-fount-image"
+        />
+        <h1 className="no-search-heading">Search Not Found</h1>
+        <p className="no-search-para">Try different keyword or search again</p>
+      </div>
     )
   }
 
@@ -225,7 +255,7 @@ class Home extends Component {
         alt="failure view"
       />
 
-      <h1 className="fail-posts">Something went wrong. Please try again</h1>
+      <p className="fail-posts">Something went wrong. Please try again</p>
       <button
         type="button"
         className="retry-button"
@@ -250,23 +280,46 @@ class Home extends Component {
 
   // rendering loader for both users stories and posts list
 
-  renderLoaderUserSlick = () => (
-    <div className="loader-container">
-      <Loader type="TailSpin" color="#4094EF" height={25} width={25} />
-    </div>
-  )
+  renderLoaderUserSlick = () => {
+    const {isSearchResults} = this.state
+    if (!isSearchResults) {
+      return (
+        <div testid="loader" className="loader-container">
+          <Loader type="TailSpin" color="#4094EF" height={25} width={25} />
+        </div>
+      )
+    }
+    return null
+  }
 
   renderLoaderPostsList = () => (
-    <div className="loader-container-posts">
+    <div testid="loader" className="loader-container-posts">
       <Loader type="TailSpin" color="#4094EF" height={50} width={50} />
     </div>
   )
+
+  onResetHome = () => {
+    this.setState(
+      {isSearchResults: false, isLoadingPosts: true},
+      this.getPostsList,
+    )
+  }
+
+  onSearchResultPosts = value => {
+    this.setState(
+      {searchInput: value, isSearchResults: true, isLoadingPosts: true},
+      this.getPostsList,
+    )
+  }
 
   render() {
     const {isLoadingStories, isLoadingPosts} = this.state
     return (
       <div>
-        <Header />
+        <Header
+          onSearchResultPosts={this.onSearchResultPosts}
+          onResetHome={this.onResetHome}
+        />
         <div className="home-container">
           {isLoadingStories
             ? this.renderLoaderUserSlick()

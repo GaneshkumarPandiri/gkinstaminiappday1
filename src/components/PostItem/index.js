@@ -7,11 +7,6 @@ import {BiShareAlt} from 'react-icons/bi'
 
 import './index.css'
 
-/*
- 
-
-        */
-
 const PostItem = props => {
   const {postItem, onClickLikePost, likedPostsList, likeCounting} = props
   const {
@@ -28,6 +23,7 @@ const PostItem = props => {
   const onLikePost = () => {
     onClickLikePost(postId)
   }
+
   const isLikedPost = likedPostsList.includes(postId)
   let count
   if (isLikedPost) {
@@ -54,7 +50,7 @@ const PostItem = props => {
       <div className="post-reactions-container">
         {isLikedPost ? (
           <button
-            // testid="unLikeIcon"
+            testid="unLikeIcon"
             type="button"
             className="react-icons"
             onClick={onLikePost}
@@ -63,7 +59,7 @@ const PostItem = props => {
           </button>
         ) : (
           <button
-            // testid="likeIcon"
+            testid="likeIcon"
             type="button"
             className="react-icons"
             onClick={onLikePost}
@@ -85,7 +81,7 @@ const PostItem = props => {
         {comments.map(commentItem => (
           <li key={commentItem.user_id} className="comment-description">
             <p>
-              <span className="commented-by">{commentItem.user_name}</span>{' '}
+              <span className="commented-by">{commentItem.user_name}</span>
               &nbsp;&nbsp;
               {commentItem.comment}
             </p>
